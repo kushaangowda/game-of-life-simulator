@@ -7,37 +7,6 @@ let prevCellStatus = [];
 function Board({ randomize, numCellsPerRow, clear, speed, start }) {
   const newArray = (arr) => JSON.parse(JSON.stringify(arr));
 
-  const neighbourCount = (i, j) => {
-    let cellCount = 0;
-
-    let currCellStatus = prevCellStatus.length === numCellsPerRow ? prevCellStatus : cellStatus;
-
-    cellCount += i - 1 >= 0 && j - 1 >= 0 ? currCellStatus[i - 1][j - 1] : 0;
-    cellCount += i + 1 < numCellsPerRow && j - 1 >= 0 ? currCellStatus[i + 1][j - 1] : 0;
-    cellCount += i - 1 >= 0 && j + 1 < numCellsPerRow ? currCellStatus[i - 1][j + 1] : 0;
-    cellCount +=
-      i + 1 < numCellsPerRow && j + 1 < numCellsPerRow ? currCellStatus[i + 1][j + 1] : 0;
-    cellCount += i - 1 >= 0 ? currCellStatus[i - 1][j] : 0;
-    cellCount += i + 1 < numCellsPerRow ? currCellStatus[i + 1][j] : 0;
-    cellCount += j - 1 >= 0 ? currCellStatus[i][j - 1] : 0;
-    cellCount += j + 1 < numCellsPerRow ? currCellStatus[i][j + 1] : 0;
-
-    return cellCount;
-  };
-
-  // get next generation stats
-  const nextGen = () => {
-    let newCellStatus = newArray(cellStatus).map((cellRow, i) =>
-      cellRow.map((cellStat, j) => {
-        if (cellStat && (neighbourCount(i, j) < 2 || neighbourCount(i, j) > 3)) return false;
-        else if (!cellStat && neighbourCount(i, j) === 3) return true;
-        return cellStat;
-      })
-    );
-    prevCellStatus = newArray(newCellStatus);
-    setCellStatus(newCellStatus);
-  };
-
   // initialize cell board randomly
   useEffect(() => {
     if (randomize) {
@@ -60,6 +29,36 @@ function Board({ randomize, numCellsPerRow, clear, speed, start }) {
 
   // start simulation
   useEffect(() => {
+    // get number of neighbors
+    const neighbourCount = (i, j) => {
+      let cellCount = 0;
+
+      cellCount += i - 1 >= 0 && j - 1 >= 0 ? prevCellStatus[i - 1][j - 1] : 0;
+      cellCount += i + 1 < numCellsPerRow && j - 1 >= 0 ? prevCellStatus[i + 1][j - 1] : 0;
+      cellCount += i - 1 >= 0 && j + 1 < numCellsPerRow ? prevCellStatus[i - 1][j + 1] : 0;
+      cellCount +=
+        i + 1 < numCellsPerRow && j + 1 < numCellsPerRow ? prevCellStatus[i + 1][j + 1] : 0;
+      cellCount += i - 1 >= 0 ? prevCellStatus[i - 1][j] : 0;
+      cellCount += i + 1 < numCellsPerRow ? prevCellStatus[i + 1][j] : 0;
+      cellCount += j - 1 >= 0 ? prevCellStatus[i][j - 1] : 0;
+      cellCount += j + 1 < numCellsPerRow ? prevCellStatus[i][j + 1] : 0;
+
+      return cellCount;
+    };
+
+    // get next generation stats
+    const nextGen = () => {
+      let newCellStatus = newArray(prevCellStatus).map((cellRow, i) =>
+        cellRow.map((cellStat, j) => {
+          if (cellStat && (neighbourCount(i, j) < 2 || neighbourCount(i, j) > 3)) return false;
+          else if (!cellStat && neighbourCount(i, j) === 3) return true;
+          return cellStat;
+        })
+      );
+      prevCellStatus = newArray(newCellStatus);
+      setCellStatus(newCellStatus);
+    };
+
     if (start) {
       clearInterval(myInterval);
       myInterval = setInterval(nextGen, speed * 100);
@@ -69,7 +68,7 @@ function Board({ randomize, numCellsPerRow, clear, speed, start }) {
     return () => {
       clearInterval(myInterval);
     };
-  }, [speed, start]);
+  }, [speed, start, numCellsPerRow]);
 
   const [cellStatus, setCellStatus] = useState([]);
 
