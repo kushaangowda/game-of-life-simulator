@@ -33,12 +33,24 @@ function Controls({ setRandomize, setClear, setSpeed, setStart }) {
 
   return (
     <div className="controls">
-      <button onClick={clearBoard}>Clear</button>
-      <button onClick={randomizeBoard}>Randomize</button>
-      <button onClick={handleStart}>Start</button>
-      <button onClick={handleStop}>Stop</button>
-      <button onClick={fast}>Fast</button>
-      <button onClick={slow}>Slow</button>
+      <div className="button" onClick={clearBoard}>
+        Clear
+      </div>
+      <div className="button" onClick={randomizeBoard}>
+        Random
+      </div>
+      <div className="button" onClick={handleStart}>
+        Start
+      </div>
+      <div className="button" onClick={handleStop}>
+        Stop
+      </div>
+      <div className="button" onClick={fast}>
+        Fast
+      </div>
+      <div className="button" onClick={slow}>
+        Slow
+      </div>
     </div>
   );
 }

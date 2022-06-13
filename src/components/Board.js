@@ -79,12 +79,7 @@ function Board({ randomize, numCellsPerRow, clear, speed, start }) {
         return (
           <div className="cellRow" key={i}>
             {cellRow.map((cellStat, j) => (
-              <Cell
-                key={i * numCellsPerRow + j}
-                randomize={randomize}
-                clear={clear}
-                alive={cellStat}
-              />
+              <Cell key={i * numCellsPerRow + j} alive={cellStat} />
             ))}
           </div>
         );

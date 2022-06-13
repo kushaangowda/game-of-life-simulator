@@ -6,8 +6,8 @@ function App() {
   const [numCellsPerRow, setNumCellsPerRow] = useState(10);
 
   const updateWindowDimensions = () => {
-    const widthParam = Math.floor(0.65 * window.innerWidth);
-    const heightParam = Math.floor(0.75 * window.innerHeight);
+    const widthParam = Math.floor(0.45 * window.innerWidth);
+    const heightParam = Math.floor(0.55 * window.innerHeight);
     const minParam = Math.min(widthParam, heightParam);
     const numCells = Math.floor(minParam / 8);
     setNumCellsPerRow(numCells);
@@ -26,6 +26,7 @@ function App() {
 
   return (
     <div className="App">
+      <h1 className="title">Conway's Game of Life Simulation</h1>
       <Controls
         setRandomize={setRandomize}
         setClear={setClear}
