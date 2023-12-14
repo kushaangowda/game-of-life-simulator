@@ -24,4 +24,4 @@ npm start
 
 ## Demo
 
-[https://conway-game-of-life-kg.netlify.app/](https://conway-game-of-life-kg.netlify.app/)
+[https://game-of-life-kg.netlify.app/](https://game-of-life-kg.netlify.app/)
